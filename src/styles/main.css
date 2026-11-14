@@ -1,0 +1,442 @@
+/* ---------------------------------------------------------------
+   Reset（替代 @unocss/reset，保持零额外依赖）
+   --------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: currentColor;
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  vertical-align: middle;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/* ---------------------------------------------------------------
+   Base / Notion-inspired foundations
+   --------------------------------------------------------------- */
+:root {
+  --p-ink: #191919;
+  --p-ink-2: #37352f;
+  --p-muted: #6b6b68;
+  --p-faint: #9b9a97;
+  --p-line: rgba(55, 53, 47, 0.1);
+  --p-paper: #ffffff;
+  --p-paper-2: #f7f7f5;
+  --p-brand: #2383e2;
+  --header-h: 64px;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--p-paper);
+  color: var(--p-ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+}
+
+::selection {
+  background: rgba(35, 131, 226, 0.18);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--p-brand);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* thin notion-ish scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(55, 53, 47, 0.16);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(55, 53, 47, 0.3);
+  background-clip: padding-box;
+}
+
+/* ---------------------------------------------------------------
+   Scroll reveal（含轻微模糊的"凝聚成型"入场 + 方向变体）
+   --------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(5px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* 方向/形态变体：与 .reveal 连用，配合 v-reveal.left / .right / .scale */
+.reveal-l {
+  transform: translateX(-28px);
+}
+.reveal-r {
+  transform: translateX(28px);
+}
+.reveal-scale {
+  transform: scale(0.96);
+}
+
+/* 线条生长变体：与 .reveal 连用（如流程连接线），滚动触发时 scaleX 0 → 1 */
+.reveal-line {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.reveal-line.is-in {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .reveal-line {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  .anim-float,
+  .anim-pulse-dot,
+  .anim-dash,
+  .anim-rise,
+  .anim-glow,
+  .anim-grid-drift,
+  .shine-loop::after {
+    animation: none !important;
+  }
+  .page-enter-active,
+  .page-leave-active {
+    transition: none !important;
+  }
+  .shine::after,
+  .btn-primary::after {
+    display: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Decorative animations
+   --------------------------------------------------------------- */
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.anim-float {
+  animation: float-soft 7s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+}
+.anim-pulse-dot {
+  animation: pulse-dot 2.6s ease-in-out infinite;
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+.anim-dash {
+  stroke-dasharray: 5 9;
+  animation: dash-flow 9s linear infinite;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.anim-rise {
+  animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* 光晕呼吸：背景辉光层缓慢的明暗/缩放循环（套在定位层内部的元素上） */
+@keyframes glow-breathe {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+}
+.anim-glow {
+  animation: glow-breathe 9s ease-in-out infinite;
+}
+
+/* 网格纹理缓慢漂移（配合 .bg-grid 的 56px 网格周期无缝循环） */
+@keyframes grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 56px 56px;
+  }
+}
+.anim-grid-drift {
+  animation: grid-drift 20s linear infinite;
+}
+
+/* 光泽扫过：hover 触发的高光条（用于深色表面的按钮/卡片） */
+:is(.shine, .btn-primary) {
+  position: relative;
+  overflow: hidden;
+}
+:is(.shine, .btn-primary)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.28) 50%, transparent 60%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+:is(.shine, .btn-primary):hover::after {
+  transform: translateX(130%);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 光泽自动低频循环：入场后约每 10s 扫过一次（用于浅色表面的展示物） */
+@keyframes shine-cycle {
+  0% {
+    transform: translateX(-130%);
+  }
+  14% {
+    transform: translateX(130%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+.shine-loop {
+  position: relative;
+  overflow: hidden;
+}
+.shine-loop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(35, 131, 226, 0.10) 50%, transparent 58%);
+  transform: translateX(-130%);
+  animation: shine-cycle 10s cubic-bezier(0.16, 1, 0.3, 1) 2.4s infinite;
+  pointer-events: none;
+}
+
+/* 卡片顶部强调线：hover 时从左向右生长 */
+.hover-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--p-ink);
+  border-radius: inherit;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+.hover-line:hover::before {
+  transform: scaleX(1);
+}
+
+/* ---------------------------------------------------------------
+   Fine grid / dot textures (Notion-adjacent, low contrast)
+   --------------------------------------------------------------- */
+.bg-dots {
+  background-image: radial-gradient(rgba(55, 53, 47, 0.12) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.bg-grid {
+  background-image: linear-gradient(to right, rgba(55, 53, 47, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(55, 53, 47, 0.055) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+.mask-fade-edges {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* ---------------------------------------------------------------
+   Route transition：快出慢入，带轻微缩放的连贯方向感
+   --------------------------------------------------------------- */
+.page-enter-active {
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.page-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(16px) scale(0.995);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* ---------------------------------------------------------------
+   Long-form article (case detail / technology)
+   --------------------------------------------------------------- */
+.prose-notion {
+  color: var(--p-ink-2);
+  font-size: 16px;
+  line-height: 1.85;
+}
+.prose-notion p + p {
+  margin-top: 14px;
+}
+.prose-notion strong {
+  color: var(--p-ink);
+  font-weight: 600;
+}
