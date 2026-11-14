@@ -27,7 +27,6 @@
 ## 项目结构
 
 ```
-```
 ├── index.html              # 入口模板（SEO 占位符由构建期从 src/copy 注入）
 ├── .github/workflows/      # GitHub Pages 自动部署流水线
 ├── vite.config.ts          # Vite 配置（@ 别名 + SEO 注入插件）
